@@ -32,7 +32,7 @@ const MessageContainer = () => {
       };
 
       const response = await axios.get(
-        `http://localhost:8000/api/messages/${conversationId}`,
+        `https://chat-app-backend-k80s.onrender.com/api/messages/${conversationId}`,
         { headers }
       );
       setMessages(response.data.messages);
@@ -179,7 +179,7 @@ const NoChatSelected = () => {
           };
 
           const response = await axios.get(
-            "http://localhost:8000/api/users/me",
+            "https://chat-app-backend-k80s.onrender.com/api/users/me",
             {
               headers,
             }

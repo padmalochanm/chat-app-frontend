@@ -19,7 +19,7 @@ export const SocketContextProvider = ({ children }) => {
             const decodedToken = jwtDecode(token);
             setUserId(decodedToken.userId);
 
-            const socket = io("http://localhost:8000", {
+            const socket = io("https://chat-app-backend-k80s.onrender.com", {
                 query: {
                     userId: decodedToken.userId,
                 },

@@ -15,7 +15,7 @@ const Chatspage = () => {
       }
       const headers = { Authorization: `Bearer ${token}` };
       const response = await axios.get(
-        "http://localhost:8000/api/users/conversations",
+        "https://chat-app-backend-k80s.onrender.com/api/users/conversations",
         { headers }
       );
       setConversations(response.data);
@@ -29,7 +29,7 @@ const Chatspage = () => {
       const token = localStorage.getItem("authToken");
       const headers = { Authorization: `Bearer ${token}` };
       await axios.post(
-        "http://localhost:8000/api/users/conversations",
+        "https://chat-app-backend-k80s.onrender.com/api/users/conversations",
         { userId: user._id },
         { headers }
       );

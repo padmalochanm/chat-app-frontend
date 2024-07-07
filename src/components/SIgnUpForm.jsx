@@ -8,7 +8,7 @@ const SignUpForm = ({ isSignUp, onToggle }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const baseURL = "http://localhost:8000/api/auth";
+      const baseURL = "https://chat-app-backend-k80s.onrender.com/api/auth";
       const path = isSignUp ? "/signup" : "/login";
       const url = baseURL + path;
       const data = isSignUp ? { email, username, password } : { username, password };

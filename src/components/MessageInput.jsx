@@ -17,7 +17,7 @@ const MessageInput = ({ addMessage, receiverId }) => {
 
       // Replace with your API endpoint to send a message
       const response = await axios.post(
-        `http://localhost:8000/api/messages/send/${receiverId}`,
+        `https://chat-app-backend-k80s.onrender.com/api/messages/send/${receiverId}`,
         { message },
         { headers }
       );

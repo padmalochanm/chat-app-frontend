@@ -16,7 +16,7 @@ const SearchBar = ({onSelectUser}) => {
           Authorization: `Bearer ${token}`,
         };
 
-        const response = await axios.get(`http://localhost:8000/api/users`, {
+        const response = await axios.get(`https://chat-app-backend-k80s.onrender.com/api/users`, {
           headers,
         });
         setUsers(response.data); // Assuming API returns an array of user objects
