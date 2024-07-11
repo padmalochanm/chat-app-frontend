@@ -22,6 +22,17 @@ const MessageContainer = () => {
     setMessages((prevMessages) => [...prevMessages, newMessage]);
   };
 
+  const renderMessageWithLinks = (message) => {
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    return message.split(urlRegex).map((part, index) => {
+      if (part.match(urlRegex)) {
+        return <a key={index} href={part} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-700 underline">{part}</a>;
+      } else {
+        return part;
+      }
+    });
+  };
+  
   // Function to fetch messages for a specific conversation
   const fetchMessages = async (conversationId) => {
     try {
@@ -103,7 +114,8 @@ const MessageContainer = () => {
               <button
                 className="btn btn-square btn-ghost text-2xl"
                 onClick={() => {
-                  setSelectedConversation(null); // Clear selected conversation
+                  setSelectedConversation(null);
+                  window.location.reload(); // Clear selected conversation
                 }}
               >
                 <BsArrowBarLeft />
@@ -131,7 +143,7 @@ const MessageContainer = () => {
                       message.senderId === loggedInUserId
                         ? "chat-end"
                         : "chat-start"
-                    }`}
+                    } mb-2`}
                   >
                     <p
                       className={`chat-bubble ${
@@ -140,7 +152,7 @@ const MessageContainer = () => {
                           : "chat-bubble-accent"
                       }`}
                     >
-                      {message.message}
+                      {renderMessageWithLinks(message.message)}
                     </p>
                     <span className="text-sm text-gray-500">
                       {extractTime(message.createdAt)}

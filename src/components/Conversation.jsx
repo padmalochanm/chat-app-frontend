@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import {jwtDecode} from "jwt-decode";
 import { useConversation } from "../context/ConversationContext";
 import { useSocketContext } from "../context/SocketContext";
+import { extractTime } from "../utils/extractTime";
 
 export const Conversation = ({ conversation }) => {
   const [loggedInUserId, setLoggedInUserId] = useState(null);
@@ -26,21 +27,27 @@ export const Conversation = ({ conversation }) => {
 
   // Check if the other participant is online
   const isOnline = onlineUsers.includes(otherParticipant._id);
-  console.log(isOnline);
 
   const handleConversationClick = () => {
     setSelectedConversation(conversation);
     // Additional logic if needed
   };
 
-  const isSelected = selectedConversation?._id === conversation._id;
+  const truncateMessage = (message, maxLength = 25) => {
+    if (message.length > maxLength) {
+      return message.substring(0, maxLength) + '...';
+    }
+    return message;
+  };
 
+  const isSelected = selectedConversation?._id === conversation._id;
+  const unread = conversation.unreadMessagesCount > 0;
   return (
     <>
       <div
         className={`flex gap-2 items-center hover:bg-secondary rounded p-2 py-1 cursor-pointer ${
           isSelected ? "bg-secondary" : ""
-        }`}
+        } ${unread ? "font-bold" : ""}`}
         onClick={handleConversationClick}
       >
         <div className={`avatar ${isOnline ? "online" : ""}`}>
@@ -50,10 +57,18 @@ export const Conversation = ({ conversation }) => {
         </div>
 
         <div className="flex flex-col flex-1">
-          <div className="flex gap-3 justify-between">
+        <div className="flex justify-between flex-col">
             <p className="text-xl font-serif">
               {otherParticipant.username}
             </p>
+            <div className="flex gap-3 justify-between">
+            <p className="text-lg font-thin">
+              {truncateMessage(conversation.lastMessage.message)}
+            </p>
+            <p className="text-lg font-thin">
+              {extractTime(conversation.lastMessage.createdAt)}
+            </p>
+            </div>
           </div>
         </div>
       </div>

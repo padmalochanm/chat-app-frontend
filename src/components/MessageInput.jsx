@@ -40,15 +40,15 @@ const MessageInput = ({ addMessage, receiverId }) => {
       <div className="relative w-full">
         <input
           type="text"
-          placeholder="Type here"
-          className="input input-bordered w-full"
+          placeholder="send message ...."
+          className="input input-bordered flex-grow"
           value={message}
           name='message'
           onChange={(e) => setMessage(e.target.value)}
         />
         <button
           type="submit"
-          className="absolute right-2 top-1/2 transform -translate-y-1/2 p-2"
+          className="ml-2 p-2 text-2xl btn btn-secondary rounded-full"
         >
           <BsSend />
         </button>
