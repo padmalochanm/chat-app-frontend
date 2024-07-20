@@ -188,7 +188,7 @@ const NoChatSelected = () => {
           };
 
           const response = await axios.get(
-            "http://chat-app-backend-k80s.onrender.com/api/users/me",
+            "https://chat-app-backend-k80s.onrender.com/api/users/me",
             {
               headers,
             }
