@@ -20,7 +20,19 @@ const Chatspage = () => {
         "https://chat-app-backend-k80s.onrender.com/api/users/conversations",
         { headers }
       );
-      const sortedConversations = response.data;
+      const sortedConversations = response.data.sort((a, b) => {
+        if (!a.lastMessage && !b.lastMessage) {
+          return 0; // Both have no lastMessage, so they are equal
+        }
+        if (!a.lastMessage) {
+          return -1; // a comes before b if a has no lastMessage
+        }
+        if (!b.lastMessage) {
+          return 1; // b comes before a if b has no lastMessage
+        }
+        // Both have lastMessage, so sort by createdAt
+        return new Date(b.lastMessage.createdAt) - new Date(a.lastMessage.createdAt);
+      });
       setConversations(sortedConversations);
     } catch (error) {
       console.error("Error fetching conversations:", error);

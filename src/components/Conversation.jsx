@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 import { useSocketContext } from "../context/SocketContext";
 import { extractTime } from "../utils/extractTime";
 
@@ -33,7 +33,7 @@ export const Conversation = ({ conversation, conv, setConv }) => {
 
   const truncateMessage = (message, maxLength = 20) => {
     if (message.length > maxLength) {
-      return message.substring(0, maxLength) + '...';
+      return message.substring(0, maxLength) + "...";
     }
     return message;
   };
@@ -56,17 +56,17 @@ export const Conversation = ({ conversation, conv, setConv }) => {
 
         <div className="flex flex-col flex-1">
           <div className="flex justify-between flex-col">
-            <p className="text-xl font-serif">
-              {otherParticipant.username}
-            </p>
-            <div className="flex gap-3 justify-between">
-            <p className="text-lg font-thin">
-              {truncateMessage(conversation.lastMessage.message)}
-            </p>
-            <p className="text-lg font-thin">
-              {extractTime(conversation.lastMessage.createdAt)}
-            </p>
-            </div>
+            <p className="text-xl font-serif">{otherParticipant.username}</p>
+            {conversation.lastMessage && (
+              <div className="flex gap-3 justify-between">
+                <p className="text-lg font-thin">
+                  {truncateMessage(conversation.lastMessage.message)}
+                </p>
+                <p className="text-lg font-thin">
+                  {extractTime(conversation.lastMessage.createdAt)}
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </div>
