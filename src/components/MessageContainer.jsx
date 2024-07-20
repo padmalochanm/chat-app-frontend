@@ -2,14 +2,12 @@ import MessageInput from "./MessageInput";
 import { BsArrowBarLeft } from "react-icons/bs";
 import { TiMessages } from "react-icons/ti";
 import { useEffect, useState, useRef } from "react";
-import { useConversation } from "../context/ConversationContext";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { extractTime } from "../utils/extractTime.js";
 import { useSocketContext } from "../context/SocketContext";
 
-const MessageContainer = () => {
-  const { selectedConversation, setSelectedConversation } = useConversation();
+const MessageContainer = ({conv}) => {
   const { socket } = useSocketContext();
   const [loggedInUserId, setLoggedInUserId] = useState(null);
   const [otherParticipant, setOtherParticipant] = useState(null);
@@ -32,7 +30,7 @@ const MessageContainer = () => {
       }
     });
   };
-  
+
   // Function to fetch messages for a specific conversation
   const fetchMessages = async (conversationId) => {
     try {
@@ -55,10 +53,11 @@ const MessageContainer = () => {
   };
 
   useEffect(() => {
-    if (selectedConversation) {
-      fetchMessages(selectedConversation._id);
+    if (conv) {
+      fetchMessages(conv._id);
+      //console.log(conv);
     }
-  }, [selectedConversation]);
+  }, [conv]);
 
   useEffect(() => {
     const token = localStorage.getItem("authToken");
@@ -67,13 +66,13 @@ const MessageContainer = () => {
       setLoggedInUserId(decodedToken.userId);
     }
 
-    if (selectedConversation) {
-      const participant = selectedConversation.participants.find(
+    if (conv) {
+      const participant = conv.participants.find(
         (participant) => participant._id !== loggedInUserId
       );
       setOtherParticipant(participant);
     }
-  }, [selectedConversation, loggedInUserId]);
+  }, [conv, loggedInUserId]);
 
   useEffect(() => {
     const handleNewMessage = (newMessage) => {
@@ -104,17 +103,16 @@ const MessageContainer = () => {
   }, [messages, loading]);
 
   return (
-    <div className="flex flex-col h-full">
-      {!selectedConversation ? (
+    <div className="flex flex-col min-h-screen">
+      {!conv ? (
         <NoChatSelected />
       ) : (
-        <>
-          <div className="navbar bg-base-100 flex flex-row">
+        <div className="min-h-screen">
+          <div className="navbar bg-base-100 flex flex-row ">
             <div className="flex-1">
               <button
                 className="btn btn-square btn-ghost text-2xl"
                 onClick={() => {
-                  setSelectedConversation(null);
                   window.location.reload(); // Clear selected conversation
                 }}
               >
@@ -134,7 +132,7 @@ const MessageContainer = () => {
             {loading ? (
               <p>Loading messages...</p>
             ) : (
-              <div className="message-list flex-grow h-96 overflow-y-auto p-4">
+              <div className="message-list flex-grow min-screen overflow-y-auto p-4">
                 {/* Render messages for the selected conversation */}
                 {messages.map((message) => (
                   <div
@@ -169,7 +167,7 @@ const MessageContainer = () => {
               receiverId={otherParticipant?._id}
             />
           </div>
-        </>
+        </div>
       )}
     </div>
   );
@@ -178,7 +176,6 @@ const MessageContainer = () => {
 export default MessageContainer;
 
 const NoChatSelected = () => {
-  const { setSelectedConversation } = useConversation();
   const [userName, setUserName] = useState("");
 
   useEffect(() => {
@@ -191,7 +188,7 @@ const NoChatSelected = () => {
           };
 
           const response = await axios.get(
-            "https://chat-app-backend-k80s.onrender.com/api/users/me",
+            "http://chat-app-backend-k80s.onrender.com/api/users/me",
             {
               headers,
             }
@@ -205,10 +202,10 @@ const NoChatSelected = () => {
     };
 
     fetchUserDetails();
-  }, [setSelectedConversation]);
+  }, []);
 
   return (
-    <div className="flex items-center justify-center w-full h-full">
+    <div className="items-center justify-center w-full h-full hidden md:flex">
       <div className="px-4 text-center sm:text-lg md:text-xl font-semibold flex flex-col items-center gap-2">
         <p>Welcome 👋 {userName} ❄</p>
         <p>Select a chat to start messaging</p>
