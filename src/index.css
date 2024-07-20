@@ -3,5 +3,12 @@
 @tailwind utilities;
 
 .min-h-screen{
-    min-height: 80vh;
+    min-height: 75vh;
+}
+
+.screen{
+    max-height: 80vh;
+}
+.min-screen{
+    height: 57vh;
 }
