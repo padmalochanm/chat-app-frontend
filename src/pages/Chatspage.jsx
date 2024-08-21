@@ -1,4 +1,3 @@
-import SearchBar from "../components/SearchBar";
 import { Conversation } from "../components/Conversation";
 import { useEffect, useState } from "react";
 import axios from "axios";
