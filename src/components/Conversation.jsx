@@ -32,8 +32,11 @@ export const Conversation = ({ conversation, conv, setConv }) => {
   };
 
   const truncateMessage = (message, maxLength = 20) => {
+    if (!message) {
+      return "No messages yet"; // Default message when there's no lastMessage
+    }
     if (message.length > maxLength) {
-      return message.substring(0, maxLength) + "...";
+      return message.substring(0, maxLength) + '...';
     }
     return message;
   };

@@ -20,7 +20,6 @@ const Chatspage = () => {
         "http://localhost:8000/api/users/conversations",
         { headers }
       );
-      console.log(response.data[0].lastMessage.createdAt);
       const sortedConversations = response.data.sort((a, b) => {
         if (!a.lastMessage && !b.lastMessage) {
           return 0; // Both have no lastMessage, so they are equal
