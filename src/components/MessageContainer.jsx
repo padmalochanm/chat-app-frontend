@@ -7,7 +7,7 @@ import { jwtDecode } from "jwt-decode";
 import { extractTime } from "../utils/extractTime.js";
 import { useSocketContext } from "../context/SocketContext";
 
-const MessageContainer = ({conv}) => {
+const MessageContainer = ({ conv }) => {
   const { socket } = useSocketContext();
   const [loggedInUserId, setLoggedInUserId] = useState(null);
   const [otherParticipant, setOtherParticipant] = useState(null);
@@ -24,7 +24,17 @@ const MessageContainer = ({conv}) => {
     const urlRegex = /(https?:\/\/[^\s]+)/g;
     return message.split(urlRegex).map((part, index) => {
       if (part.match(urlRegex)) {
-        return <a key={index} href={part} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-700 underline">{part}</a>;
+        return (
+          <a
+            key={index}
+            href={part}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-500 hover:text-blue-700 underline"
+          >
+            {part}
+          </a>
+        );
       } else {
         return part;
       }
@@ -143,15 +153,28 @@ const MessageContainer = ({conv}) => {
                         : "chat-start"
                     } mb-2`}
                   >
-                    <p
-                      className={`chat-bubble ${
-                        message.senderId === loggedInUserId
-                          ? "chat-bubble-primary"
-                          : "chat-bubble-accent"
-                      }`}
-                    >
-                      {renderMessageWithLinks(message.message)}
-                    </p>
+                    <div className="flex flex-col items-end">
+                      {message.fileUrl && (
+                        <div className="chat-image">
+                          <img
+                            src={message.fileUrl}
+                            alt="uploaded file"
+                            className="w-full sm:max-w-xs md:max-w-sm lg:max-w-md xl:max-w-lg rounded-lg"
+                          />
+                        </div>
+                      )}
+                      {message.message && (
+                        <p
+                          className={`chat-bubble ${
+                            message.senderId === loggedInUserId
+                              ? "chat-bubble-primary"
+                              : "chat-bubble-accent"
+                          } mt-2`}
+                        >
+                          {renderMessageWithLinks(message.message)}
+                        </p>
+                      )}
+                    </div>
                     <span className="text-sm text-gray-500">
                       {extractTime(message.createdAt)}
                     </span>

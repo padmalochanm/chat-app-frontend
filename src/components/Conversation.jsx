@@ -32,13 +32,16 @@ export const Conversation = ({ conversation, conv, setConv }) => {
   };
 
   const truncateMessage = (message, maxLength = 20) => {
-    if (!message) {
-      return "No messages yet"; // Default message when there's no lastMessage
+    if(!message.message && !message.fileUrl){
+      return "No messages yet";
     }
-    if (message.length > maxLength) {
-      return message.substring(0, maxLength) + '...';
+    if (!message.message && message.fileUrl) {
+      return "Image"; // Default message when there's no lastMessage
     }
-    return message;
+    if (message.message.length > maxLength) {
+      return message.message.substring(0, maxLength) + '...';
+    }
+    return message.message;
   };
 
   const isSelected = conv?._id === conversation._id;
@@ -63,7 +66,7 @@ export const Conversation = ({ conversation, conv, setConv }) => {
             {conversation.lastMessage && (
               <div className="flex gap-3 justify-between">
                 <p className="text-lg font-thin">
-                  {truncateMessage(conversation.lastMessage.message)}
+                  {truncateMessage(conversation.lastMessage)}
                 </p>
                 <p className="text-lg font-thin">
                   {extractTime(conversation.lastMessage.createdAt)}
