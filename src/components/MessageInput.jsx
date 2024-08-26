@@ -88,12 +88,14 @@ const MessageInput = ({ addMessage, receiverId }) => {
         "Content-Type": "application/json",
       };
       const fileUrl = await uploadFile(file);
-      await axios.post(
+      const fileType = file.type.split('/')[0];
+      const fileName = file.name;
+      const response = await axios.post(
         `https://chat-app-backend-k80s.onrender.com/api/messages/send/${receiverId}`,
-        { message, fileUrl },
+        { message, fileUrl, fileType, fileName },
         { headers }
       );
-
+      addMessage(response.data.newMessage);
       closeModal();
     } catch (error) {
       console.error("Error sending file:", error);

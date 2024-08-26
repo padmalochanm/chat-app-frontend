@@ -6,6 +6,7 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { extractTime } from "../utils/extractTime.js";
 import { useSocketContext } from "../context/SocketContext";
+import DownloadableFile from "./DownloadableFile.jsx"
 
 const MessageContainer = ({ conv }) => {
   const { socket } = useSocketContext();
@@ -155,13 +156,13 @@ const MessageContainer = ({ conv }) => {
                   >
                     <div className="flex flex-col items-end">
                       {message.fileUrl && (
-                        <div className="chat-image">
-                          <img
-                            src={message.fileUrl}
-                            alt="uploaded file"
-                            className="w-full sm:max-w-xs md:max-w-sm lg:max-w-md xl:max-w-lg rounded-lg"
-                          />
-                        </div>
+                        <DownloadableFile
+                          fileUrl={message.fileUrl}
+                          fileType={message.fileType}
+                          fileName={message.fileName}
+                          className="w-full sm:max-w-xs md:max-w-sm lg:max-w-md xl:max-w-lg rounded-lg"
+                          isSender={message.senderId === loggedInUserId} // Pass down whether the user is the sender
+                        />
                       )}
                       {message.message && (
                         <p
