@@ -34,7 +34,7 @@ const MessageInput = ({ addMessage, receiverId }) => {
       /* Replace with your API endpoint to send a message*/
       const response = await axios.post(
         `https://chat-app-backend-k80s.onrender.com/api/messages/send/${receiverId}`,
-        {message},
+        { message },
         { headers }
       );
 
@@ -45,14 +45,14 @@ const MessageInput = ({ addMessage, receiverId }) => {
       addMessage(newMessage);
 
       // Clear input and close the modal after sending
-      setMessage('');
+      setMessage("");
     } catch (error) {
       console.error("Error sending message:", error);
     }
   };
 
   const uploadFile = async (file) => {
-    let fileType = file.type.split('/')[0];
+    let fileType = file.type.split("/")[0];
     let upload_preset = "";
     if (fileType === "image") {
       upload_preset = "images";
@@ -69,9 +69,9 @@ const MessageInput = ({ addMessage, receiverId }) => {
       const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
       const response = await axios.post(
         `https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`,
-        formData,
+        formData
       );
-      const {secure_url} = response.data;
+      const { secure_url } = response.data;
       return secure_url;
     } catch (error) {
       console.error("Error uploading file:", error);
@@ -90,10 +90,10 @@ const MessageInput = ({ addMessage, receiverId }) => {
       const fileUrl = await uploadFile(file);
       await axios.post(
         `https://chat-app-backend-k80s.onrender.com/api/messages/send/${receiverId}`,
-        {message, fileUrl},
+        { message, fileUrl },
         { headers }
       );
-      
+
       closeModal();
     } catch (error) {
       console.error("Error sending file:", error);
@@ -134,7 +134,6 @@ const MessageInput = ({ addMessage, receiverId }) => {
       {/* Modal for file confirmation */}
       <dialog id="my_modal_1" className="modal">
         <div className="modal-box relative">
-          {/* Close button at the top-right corner */}
           <button
             className="btn btn-sm btn-circle absolute right-2 top-2 text-2xl"
             onClick={closeModal}
