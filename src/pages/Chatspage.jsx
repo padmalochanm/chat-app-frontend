@@ -17,7 +17,7 @@ const Chatspage = () => {
       }
       const headers = { Authorization: `Bearer ${token}` };
       const response = await axios.get(
-        "http://localhost:8000/api/users/conversations",
+        "https://chat-app-backend-k80s.onrender.com/api/users/conversations",
         { headers }
       );
       const sortedConversations = response.data.sort((a, b) => {
