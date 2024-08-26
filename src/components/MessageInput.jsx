@@ -51,21 +51,48 @@ const MessageInput = ({ addMessage, receiverId }) => {
     }
   };
 
+  const uploadFile = async (file) => {
+    let fileType = file.type.split('/')[0];
+    let upload_preset = "";
+    if (fileType === "image") {
+      upload_preset = "images";
+    } else if (fileType === "video") {
+      upload_preset = "videos";
+    } else {
+      upload_preset = "others";
+    }
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", upload_preset);
+
+    try {
+      const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
+      const response = await axios.post(
+        `https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`,
+        formData,
+      );
+      const {secure_url} = response.data;
+      return secure_url;
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      return null;
+    }
+  };
+
   const handleFileSubmit = async (e) => {
     e.preventDefault();
     try {
       const token = localStorage.getItem("authToken");
       const headers = {
         Authorization: `Bearer ${token}`,
-        "Content-Type": "multipart/form-data",
+        "Content-Type": "application/json",
       };
-
-      const response = await axios.post(
-        `https://chat-app-backend-k80s.onrender.com/api/files/send/${receiverId}`,
-        {message, file},
+      const fileUrl = await uploadFile(file);
+      await axios.post(
+        `https://chat-app-backend-k80s.onrender.com/api/messages/send/${receiverId}`,
+        {message, fileUrl},
         { headers }
       );
-
       
       closeModal();
     } catch (error) {
